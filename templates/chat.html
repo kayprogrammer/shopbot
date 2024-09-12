@@ -1,0 +1,126 @@
+{% extends "index.html" %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    <div class="container-fluid chat-container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="chat-box card">
+                    <div class="card-header bg-lightblue text-center d-flex">
+                        <h4 style="color: black; font-weight: bold">ShopBot - Your Shopping Assistant</h4>
+                        <a style="margin-left: auto; order: 2; font-weight: bold; color: white;" href="{{ url_for('auth_bp.logout') }}">Logout</a>
+                    </div>
+                    <div class="card-body chat-body">
+                        <div id="chat-area">
+                            <!-- Messages will appear here -->
+                            <div class="message bot-message">
+                                <p>Hi {{ current_user.username }}! What product are you looking for?</p>
+                            </div>
+                            {% for message in messages %}
+                                <div class="message user-message">
+                                    <p>{{ message.text }}</p>
+                                </div>
+                                <div class="message bot-message">
+                                    <p>Here's what I found</p>
+                                </div>
+                                <div class="row">
+                                    {% for product in message.products %}
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card product-card">
+                                            <img src="{{product.image}}" class="card-img-top" alt="{{product.title}}">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Platform: {{product.source}}</h6>
+                                                <h5 class="card-title">{{product.title}}</h5>
+                                                <p class="card-text">${{product.price}}</p>
+                                                <a href="{{product.link}}" class="btn btn-primary" target="_blank">View Product</a>
+                                                <p class="mt-2">Rating: {{product.rating}} / 5</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            
+                           
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="input-group">
+                            <form id="chat-form" class="d-flex">
+                                <input type="text" class="form-control" name="message" id="message-input" placeholder="Type your message..." required />
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <div class="input-group-append ml-4" id="send-btn-div">
+                                    <button class="btn btn-primary" type="submit" id="send-btn">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Recommendations Section -->
+                {% if products %}
+                <div class="product-recommendations mt-4">
+                    <h4>Recommended Products</h4>
+                    <div class="row">
+                        {% for product in products %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card product-card">
+                                    <img src="{{ product['image'] }}" class="card-img-top" alt="{{ product['name'] }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ product['name'] }}</h5>
+                                        <p class="card-text">{{ product['price'] }}</p>
+                                        <a href="{{ product['link'] }}" class="btn btn-primary" target="_blank">View Product</a>
+                                        <p classa="mt-2">Rating: {{ product['rating'] }} / 5</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    // $(document).ready(function() {
+    //     $('#chat-form').on('submit', function(event) {
+    //         event.preventDefault(); // Prevent the form from reloading the page
+            
+    //         const message = $('#message-input').val();  // Get the value of the message input
+    //         console.log(message)
+    //         // Create a JSON object
+    //         const data = {
+    //             message: message
+    //         };
+
+    //         // Send an AJAX POST request with JSON data
+    //         $.ajax({
+    //             url: "{{ url_for('chat_bp.chat') }}",
+    //             type: 'POST',
+    //             contentType: 'application/json', // Send as JSON
+    //             data: JSON.stringify(data), // Convert the data to JSON
+    //             headers: {
+    //                 'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value // Include CSRF token
+    //             },
+    //             success: function(response) {
+    //                 console.log(response);
+    //                 // Append the new message to the chat container
+    //                 $('.user-message').html('<p><strong>You:</strong> ' + response.message.text + '</p>');
+    //                 $('#message-input').val(''); // Clear input field
+
+    //                 // Display products (if any)
+    //                 response.products.forEach(product => {
+    //                     $('.products-container').append('<p>' + product.name + ' - ' + product.price + '</p>');
+    //                 });
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 alert('Error sending message: ' + error);
+    //             }
+    //         });
+    //     });
+    // });
+</script>
+{% endblock %}

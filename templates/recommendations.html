@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% block title %}Recommendations{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <h1>Your Recommendations</h1>
+    <div class="recommendations">
+        {% if recommendations %}
+            <ul>
+                {% for product in recommendations %}
+                    <li>
+                        <h3>{{ product.title }}</h3>
+                        <p>Price: {{ product.price }}</p>
+                        <p>Rating: {{ product.rating }}</p>
+                        <a href="{{ product.link }}">View Product</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No recommendations available at this time.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}
