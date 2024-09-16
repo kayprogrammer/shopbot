@@ -16,12 +16,13 @@ def find_first_number(s):
 
 
 def convert_to_dollars(amount):
-    return amount / 1600
+    return float(f"{float(amount / 1600):.2f}")
 
 
-def real_amount_value(amount):
-    cleaned_value = re.sub(r"[₦$,]", "", amount)
-    try:
-        return int(cleaned_value)
-    except:
-        return None
+# def real_amount_value(amount):
+#     cleaned_value = re.sub(r"[₦$,]", "", amount)
+#     try:
+#         float_val = float(cleaned_value)
+#         return f"{float_val:.2f}"
+#     except Exception as e:
+#         return None

@@ -17,7 +17,7 @@
                             <div class="message bot-message">
                                 <p>Hi {{ current_user.username }}! What product are you looking for?</p>
                             </div>
-                            {% for message in messages %}
+                            {% for message in messages if message.products|length > 0 %}
                                 <div class="message user-message">
                                     <p>{{ message.text }}</p>
                                 </div>

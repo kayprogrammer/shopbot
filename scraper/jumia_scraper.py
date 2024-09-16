@@ -2,7 +2,6 @@ from scraper.base import (
     DRIVER_LOCATION,
     convert_to_dollars,
     find_first_number,
-    real_amount_value,
 )
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -10,7 +9,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
-from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
 
@@ -38,8 +36,8 @@ def scrape_jumia(query):
             try:
                 name = item.select_one(".name").get_text()
                 price = item.select_one(".prc").get_text()
-                price = convert_to_dollars(real_amount_value(price))
-                link = item.select_one("a").get("href")
+                price = convert_to_dollars(find_first_number(price))
+                link = item.select_one("a.core").get("href")
                 image = item.select_one("img").get("data-src")
                 rating = item.select_one(".stars._s").get_text()
                 rating = find_first_number(rating)

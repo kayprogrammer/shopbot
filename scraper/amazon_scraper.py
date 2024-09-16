@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from scraper.base import DRIVER_LOCATION, find_first_number, real_amount_value
+from scraper.base import DRIVER_LOCATION, find_first_number
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
@@ -28,9 +28,9 @@ def scrape_amazon(query):
         for item in soup.select(".s-main-slot .s-result-item"):
             try:
                 name = item.select_one(".a-text-normal").get_text()
-                price = item.select_one(".a-price-whole").get_text()
-                price = real_amount_value(price)
-                link = item.select_one(".a-link-normal").get("href")
+                price = item.select_one(".a-offscreen").get_text()
+                price = find_first_number(price)
+                link = item.select_one("a.a-link-normal").get("href")
                 image = item.select_one(".s-image").get("src")
                 rating = item.select_one(".a-icon-alt").get_text()
                 rating = find_first_number(rating)
@@ -42,11 +42,10 @@ def scrape_amazon(query):
                     "link": f"https://amazon.com{link}",
                     "rating": rating,
                 }
-                if None in product_data.values():
+                if None in list(product_data.values()):
                     continue
                 products.append(product_data)
             except Exception as e:
-                print(e)
                 continue
         print("Amazon Scraped")
         return products

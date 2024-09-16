@@ -56,7 +56,7 @@ class Product(db.Model):
         db.Integer, db.ForeignKey("messages.id", ondelete="CASCADE"), nullable=True
     )
     title = db.Column(db.String(255), nullable=False)
-    price = db.Column(db.Integer)  # Ensure this field is in a consistent format
+    price = db.Column(db.Float)  # Ensure this field is in a consistent format
     link = db.Column(db.String(10000))
     image = db.Column(db.String(10000))
     source = db.Column(db.String(50))

@@ -1,4 +1,4 @@
-from scraper.base import DRIVER_LOCATION, find_first_number, real_amount_value
+from scraper.base import DRIVER_LOCATION, find_first_number
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
@@ -22,7 +22,7 @@ def scrape_ebay(query):
         try:
             name = item.select_one(".s-item__title").get_text()
             price = item.select_one(".s-item__price").get_text()
-            price = real_amount_value(price)
+            price = find_first_number(price)
             link = item.select_one(".s-item__link").get("href")
             image = item.select_one("img").get("src")
             rating = (
@@ -44,7 +44,8 @@ def scrape_ebay(query):
             if None in product_data.values():
                 continue
             products.append(product_data)
-        except:
+        except Exception as e:
+            print("Ebay soup:", e)
             continue
     print("Ebay Scraped")
     return products
