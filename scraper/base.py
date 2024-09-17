@@ -1,8 +1,10 @@
 from pathlib import Path
-import os, re
+import os, re, platform
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DRIVER_LOCATION = os.path.join(BASE_DIR, "geckodriver")
+system = platform.system()
+driver = "geckodriver.exe" if system == "Windows" else "geckodriver"
+DRIVER_LOCATION = os.path.join(BASE_DIR, driver)
 
 
 def find_first_number(s):
@@ -17,12 +19,3 @@ def find_first_number(s):
 
 def convert_to_dollars(amount):
     return float(f"{float(amount / 1600):.2f}")
-
-
-# def real_amount_value(amount):
-#     cleaned_value = re.sub(r"[₦$,]", "", amount)
-#     try:
-#         float_val = float(cleaned_value)
-#         return f"{float_val:.2f}"
-#     except Exception as e:
-#         return None
