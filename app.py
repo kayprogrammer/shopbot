@@ -4,7 +4,6 @@ from auth.routes import auth_bp
 from config import Config
 from bot.chat_routes import chat_bp
 from auth.models import *
-
 app = Flask(__name__)
 
 
@@ -30,4 +29,4 @@ def create_app():
 # The main entry point of the application
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True, port=8000)
+    app.run(debug=False, port=8000)
