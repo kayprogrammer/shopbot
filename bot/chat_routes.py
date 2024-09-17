@@ -6,7 +6,6 @@ from flask_login import login_required, current_user
 from scraper.scraper import scrape_all_sites
 from recommender import (
     collaborative_filtering,
-    content_based_filtering,
     format_recommendations,
 )
 from sqlalchemy.orm import joinedload
